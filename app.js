@@ -56,4 +56,31 @@ app.use(
 app.use('/stats', statsRouter);
 app.use('/deviation', deviationRouter);
 
+app.get('/', (req, res) => {
+    const baseUrl = `${req.protocol}://${req.get('host')}`; // Get the base URL (e.g., http://localhost:3000)
+    const coins = ['bitcoin', 'matic-network', 'ethereum']; // List of supported coins
+
+    // Create clickable links for each endpoint and coin
+    let links = `<h1>Welcome to the KoinX Crypto Analytics Engine!</h1>`;
+    links += `<h2>Available Endpoints:</h2>`;
+
+    // Root endpoint link
+    links += `<p><a href="${baseUrl}/">Home</a></p>`;
+
+    // Links for /stats endpoint
+    links += `<h3>Get the latest stats for a cryptocurrency:</h3>`;
+    coins.forEach(coin => {
+        links += `<p><a href="${baseUrl}/stats?coin=${coin}">/stats?coin=${coin}</a></p>`;
+    });
+
+    // Links for /deviation endpoint
+    links += `<h3>Get the standard deviation of the last 100 prices for a cryptocurrency:</h3>`;
+    coins.forEach(coin => {
+        links += `<p><a href="${baseUrl}/deviation?coin=${coin}">/deviation?coin=${coin}</a></p>`;
+    });
+
+    // Send the HTML response
+    res.send(links);
+});
+
 export default app;
